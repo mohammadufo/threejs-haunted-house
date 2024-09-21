@@ -29,7 +29,16 @@ const walls = new THREE.Mesh(
   new THREE.MeshStandardMaterial({ color: '#ac8e82' })
 )
 walls.position.y = 1.25
-scene.add(walls)
+house.add(walls)
+
+//! Roof
+const roof = new THREE.Mesh(
+  new THREE.ConeGeometry(3.5, 1.5, 4),
+  new THREE.MeshStandardMaterial({ color: '#b35f45' })
+)
+roof.position.y = 2.5 + 0.75
+roof.rotation.y = Math.PI * 0.25
+house.add(roof)
 
 // Floor
 const floor = new THREE.Mesh(
@@ -38,6 +47,7 @@ const floor = new THREE.Mesh(
 )
 floor.rotation.x = -Math.PI * 0.5
 floor.position.y = 0
+
 scene.add(floor)
 
 /**

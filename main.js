@@ -21,6 +21,37 @@ const fog = new THREE.Fog('#262837', 1, 15)
 scene.fog = fog
 
 /**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+
+//* floor
+const floorAlphaTexture = textureLoader.load('/static/floor/alpha.jpg')
+const floorColorTexture = textureLoader.load(
+  '/static/floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_diff_1k.jpg'
+)
+const floorARMTexture = textureLoader.load(
+  '/static/floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_arm_1k.jpg'
+)
+const floorNormalTexture = textureLoader.load(
+  '/static/floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_nor_gl_1k.jpg'
+)
+const floorDisplacementTexture = textureLoader.load(
+  '/static/floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_disp_1k.jpg'
+)
+
+//* Door
+const doorColorTexture = textureLoader.load('/static/door/color.jpg')
+const doorAlphaTexture = textureLoader.load('/static/door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureLoader.load(
+  '/static/door/ambientOcclusion.jpg'
+)
+const doorHeightTexture = textureLoader.load('/static/door/height.jpg')
+const doorNormalTexture = textureLoader.load('/static/door/normal.jpg')
+const doorMetalnessTexture = textureLoader.load('/static/door/metalness.jpg')
+const doorRoughnessTexture = textureLoader.load('/static/door/roughness.jpg')
+
+/**
  * House
  */
 //! Group
@@ -46,8 +77,23 @@ house.add(roof)
 
 //! Door
 const door = new THREE.Mesh(
-  new THREE.PlaneGeometry(2, 2),
-  new THREE.MeshStandardMaterial({ color: '#aa7b7b' })
+  new THREE.PlaneGeometry(2.2, 2.2, 100, 100),
+  new THREE.MeshStandardMaterial({
+    map: doorColorTexture,
+    transparent: true,
+    alphaMap: doorAlphaTexture,
+    aoMap: doorAmbientOcclusionTexture,
+    displacementMap: doorHeightTexture,
+    normalMap: doorNormalTexture,
+    metalnessMap: doorMetalnessTexture,
+    roughnessMap: doorRoughnessTexture,
+    displacementScale: 0.15,
+    displacementBias: -0.04,
+  })
+)
+door.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2)
 )
 door.position.y = 1
 door.position.z = 2 + 0.01
@@ -111,7 +157,7 @@ scene.add(floor)
  * Lights
  */
 // Ambient light
-const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.04)
+const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.02)
 gui.add(ambientLight, 'intensity').min(0).max(1).step(0.001)
 scene.add(ambientLight)
 
